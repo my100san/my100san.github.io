@@ -1,6 +1,7 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>나의 명산 100 · 블랙야크 100대 명산(BAC100) 완등 지도</title><meta property="og:title" content="나의 명산 지도 · 블랙야크 100대 명산"><meta property="og:description" content="블랙야크 100대 명산(BAC100) 완등 지도 만들기">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
+<script>if(navigator.standalone===true)document.documentElement.classList.add("sa");</script>
 <meta name="theme-color" content="#fbfaf5">
 <link rel="icon" type="image/png" href="icon-180.png">
 <meta property="og:type" content="website">
@@ -36,6 +37,7 @@
 html,body{background:var(--page);color:var(--fg)}
 body{font-family:var(--body);line-height:1.5;word-break:keep-all}
 .wrap{max-width:900px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:8px 40px;display:grid;gap:14px}body{margin-top:0}
+@media (display-mode:standalone){.wrap{padding-top:calc(env(safe-area-inset-top,0px) + 30px)}}html.sa .wrap{padding-top:calc(env(safe-area-inset-top,0px) + 30px)} /* 홈 화면 앱: 맨 위 상태 표시줄 근처는 아이폰이 터치를 가져가서 버튼을 아래로 */
 header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
 h1{font:800 clamp(28px,7vw,40px)/1.05 var(--display);margin:0;letter-spacing:-.03em}
 .count{font:500 13px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
@@ -51,6 +53,10 @@ svg#map{display:block;width:100%;height:auto;max-height:82vh;touch-action:pan-y;
 .cardview{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#fbfaf5;box-shadow:0 6px 20px rgba(60,60,40,.08)}
 .cardview canvas{display:block;width:100%;height:auto;cursor:pointer;touch-action:pan-y;-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
 .lcol,.rcol{display:contents}
+@media (max-width:699px){ /* 폰: 첫 화면에 카드 + 아래 알약 줄까지 다 보이게, 화면이 낮으면 카드를 살짝 줄임 */
+  .cvwrap{width:fit-content;max-width:100%;margin-inline:auto} .cardview{width:fit-content;max-width:100%;margin-inline:auto}
+  .cardview canvas{width:auto;max-width:100%;max-height:calc(100svh - 78px)} html.sa .cardview canvas{max-height:calc(100svh - 108px)} }
+@media (max-width:699px) and (display-mode:standalone){ .cardview canvas{max-height:calc(100svh - 108px)} }
 @media (min-width:700px){ .cvwrap{width:fit-content;max-width:100%;margin-inline:auto} .cardview canvas{width:auto;max-width:100%;max-height:calc(100vh - 168px)} } /* 넓은 화면: 카드 + 아래 탭까지 한 화면에 */
 @media (min-width:960px){ /* 웹: 왼쪽 지도 · 오른쪽 탭, 둘이 같은 크기로 가운데 */
   body{margin:0}
@@ -502,12 +508,11 @@ footer{font-size:12px;color:var(--muted)}
   </div>
   <div hidden><button type="button" id="mkShare">이미지 저장</button><button type="button" id="linkShare">링크 공유</button></div>
   <div id="p-sticker" class="pane" hidden>
-    <h3 class="sh3">정상석</h3>
-    <div class="kv"><span class="tip">크기</span><div class="seg" id="szSeg" role="group" aria-label="정상석 크기"></div></div>
-    <div class="kv"><span class="tip">위치</span><div class="row2">
+    <div hidden><!-- 정상석 크기·위치는 카드 아래 알약 줄로 옮김 (동작은 이 버튼들을 그대로 씀) -->
+      <div class="seg" id="szSeg" role="group" aria-label="정상석 크기"></div>
       <button type="button" class="btn" id="resetPos">원위치</button>
       <button type="button" class="btn" id="autoBtn">잘 보이게</button>
-    </div></div>
+    </div>
     <h3 class="sh3">마일스톤 스티커</h3>
     <div class="slots" id="badgeSlots"></div>
     <h3 class="sh3">이번 주 스티커</h3>
@@ -1278,7 +1283,7 @@ function openCrop(r){ hideSug(); CR={r,box:(r.cbox||[.08,.08,.92,.98]).slice(),m
 const GC_SITE=location.hostname.startsWith("my100san")?"new":"old"; // 이벤트를 주소별로 구분: new = my100san.github.io, old = ynschoi.github.io/BAC100
 // ── 자동 업데이트: 홈 화면에 추가한 앱도 새 버전이 올라가면 알아서 바뀌게 ──
 // version.json(수십 바이트)만 확인하고, 다르면 새 파일을 받아 다시 연다. 작업 중(사진 반영 전)엔 다음 기회로.
-const APPV="20261105-010859";
+const APPV="20261105-024848";
 (function(){ let last=0;
   async function chk(atStart){ const now=Date.now(); if(!atStart&&now-last<60000) return; last=now;
     try{ const r=await fetch("version.json?t="+now,{cache:"no-store"}); if(!r.ok) return; const v=(await r.json()).v; if(!v||v===APPV) return;
