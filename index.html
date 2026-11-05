@@ -1,5 +1,7 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>나의 명산 100 · 블랙야크 100대 명산(BAC100) 완등 지도</title><meta property="og:title" content="나의 명산 지도 · 블랙야크 100대 명산"><meta property="og:description" content="블랙야크 100대 명산(BAC100) 완등 지도 만들기">
 <link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#fbfaf5">
 <link rel="icon" type="image/png" href="icon-180.png">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://ynschoi.github.io/BAC100/">
@@ -33,7 +35,7 @@
 }
 html,body{background:var(--page);color:var(--fg)}
 body{font-family:var(--body);line-height:1.5;word-break:keep-all}
-.wrap{max-width:900px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:22px 40px;display:grid;gap:14px}
+.wrap{max-width:900px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:8px 40px;display:grid;gap:14px}body{margin-top:0}
 header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
 h1{font:800 clamp(28px,7vw,40px)/1.05 var(--display);margin:0;letter-spacing:-.03em}
 .count{font:500 13px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
@@ -49,13 +51,13 @@ svg#map{display:block;width:100%;height:auto;max-height:82vh;touch-action:pan-y;
 .cardview{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#fbfaf5;box-shadow:0 6px 20px rgba(60,60,40,.08)}
 .cardview canvas{display:block;width:100%;height:auto;cursor:pointer;touch-action:pan-y;-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
 .lcol,.rcol{display:contents}
-@media (min-width:700px){ .cardview{width:fit-content;max-width:100%;margin-inline:auto} .cardview canvas{width:auto;max-width:100%;max-height:calc(100vh - 112px)} } /* 넓은 화면: 카드 + 아래 탭까지 한 화면에 */
+@media (min-width:700px){ .cvwrap{width:fit-content;max-width:100%;margin-inline:auto} .cardview canvas{width:auto;max-width:100%;max-height:calc(100vh - 168px)} } /* 넓은 화면: 카드 + 아래 탭까지 한 화면에 */
 @media (min-width:960px){ /* 웹: 왼쪽 지도 · 오른쪽 탭, 둘이 같은 크기로 가운데 */
   body{margin:0}
   .wrap{max-width:none;grid-template-columns:auto auto;justify-content:center;align-items:start;column-gap:32px;padding-block:24px}
   .lcol{display:grid;gap:14px}
   .rcol{display:grid;gap:14px;align-content:start;width:var(--cw,420px);height:var(--ch,auto);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
-  .cardview canvas{max-height:calc(100vh - 50px)}
+  .cardview canvas{max-height:calc(100vh - 108px)}
   .rcol{box-sizing:border-box;padding-top:14px;margin-top:-14px;height:calc(var(--ch,auto) + 14px)} /* 탭 위 event 딱지가 스크롤 상자에 잘리지 않게 위쪽 여백 */
   .rcol .ptabs{position:sticky;top:0;z-index:6;box-shadow:0 0 0 8px var(--page),0 -14px 0 8px var(--page)} /* 웹: 스크롤해도 탭 유지 */
   .rcol #p-upload .uphead{position:sticky;top:var(--st1,62px);z-index:5;background:var(--page);box-shadow:0 0 0 8px var(--page)}
@@ -70,13 +72,16 @@ svg#map{display:block;width:100%;height:auto;max-height:82vh;touch-action:pan-y;
   .rcol #ml .mh [data-k=name]::before{content:"봉우리";grid-column:2;grid-row:1}
   .rcol #ml .mh [data-k=name]::after{grid-column:1;grid-row:1;justify-self:end}
 }
-.fmtov{all:unset;cursor:pointer;position:absolute;left:6px;top:6px;z-index:3;font-size:calc(10.5px*var(--k,1));opacity:.9;font-weight:700;color:#8e8c78;background:rgba(239,237,227,.85);border-radius:999px;padding:calc(2px*var(--k,1)) calc(8px*var(--k,1))}
+.fmtov{all:unset;cursor:pointer;position:relative;z-index:3;font-size:calc(10.5px*var(--k,1));opacity:.9;font-weight:700;color:#8e8c78;background:rgba(239,237,227,.85);border-radius:999px;padding:calc(2px*var(--k,1)) calc(8px*var(--k,1))}
 .cvact{display:flex;gap:calc(4px*var(--k,1))}
-.fmtov.kk{color:#2f6a2c;background:#e6f2df;animation:kkglow 1.6s ease-in-out 2} /* 카톡: 은은하게 빛나는 강조 */
-@keyframes kkglow{0%,100%{box-shadow:0 0 3px rgba(79,154,69,.3)}50%{box-shadow:0 0 12px 2px rgba(79,154,69,.6)}}
-@media (prefers-reduced-motion:reduce){.fmtov.kk{animation:none;box-shadow:0 0 6px 2px rgba(79,154,69,.45)}}.cvact .fmtov{position:static}
-.cvbar{position:absolute;left:calc(6px*var(--k,1));right:calc(6px*var(--k,1));top:calc(6px*var(--k,1));z-index:3;display:flex;justify-content:space-between;align-items:center;gap:calc(4px*var(--k,1));pointer-events:none}.cvbar>*{pointer-events:auto}
+.fmtov.kk{color:#2f6a2c;background:#e6f2df} /* 카톡: 은은하게 빛나는 강조 */
+
+.cvact .fmtov{position:static}
+.cvbar{position:relative;z-index:3;margin:0 0 3px;display:flex;justify-content:space-between;align-items:center;gap:calc(4px*var(--k,1));pointer-events:none}.cvbar>*{pointer-events:auto}
 .cvl{display:flex;gap:calc(4px*var(--k,1))}.cvl .fmtov{position:static}
+.cvbot{display:flex;align-items:center;gap:calc(4px*var(--k,1));margin-top:3px}.cvbot .fmtov{position:static}.cvbot .cvlb{font-size:calc(10.5px*var(--k,1));color:#8e8c78;padding:0 1px 0 3px;white-space:nowrap}
+.cbsz{display:flex;gap:calc(3px*var(--k,1))}.cbsz .fmtov{min-width:calc(9px*var(--k,1));text-align:center;padding:calc(2px*var(--k,1)) calc(6px*var(--k,1))}.cbsz .fmtov[aria-pressed="true"]{background:#e6f2df;color:#2f6a2c}
+@media (max-width:360px){.cvbot{gap:2px}.cbsz{gap:1px}.cbsz .fmtov{padding:2px 4px;min-width:7px}.cvbot>.fmtov{padding:2px 5px}.cvbot .cvlb{padding:0 1px;font-size:10px}.cvbot .fmtov{font-size:10px}}
 .fmtov{white-space:nowrap}.fmtov.sq{padding:2px 7px;min-width:10px;text-align:center}.fmtov:disabled{opacity:.35;cursor:default}
 
 .cardview .ghost{position:absolute;pointer-events:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.25));opacity:.92}
@@ -124,7 +129,7 @@ input,select,textarea{font-size:16px!important}
 .evt .eside{background:#4f9a45;color:#fff;font:700 .8em/1 "Pretendard",sans-serif;letter-spacing:.35em;display:flex;align-items:center;justify-content:center;align-self:stretch;min-height:100%;position:relative}.evt .eside span{writing-mode:vertical-rl;-webkit-writing-mode:vertical-rl}
 .evt .eside:after{content:"";position:absolute;right:-6px;top:0;bottom:0;width:12px;background:radial-gradient(circle at 6px 8px,var(--page) 4px,transparent 4.5px) 0 0/12px 16px repeat-y}
 .evt .em2{font-size:min(14px,calc(100cqi/28));padding:1.15em 1em .9em 1.3em;white-space:nowrap;line-height:1.45;font-family:"Pretendard",sans-serif;color:var(--fg)} /* 화면 폭에 맞춰 글자 크기를 줄여서 어떤 화면에서도 줄넘김 없음 */
-.evt h3{margin:0;font:400 2.05em/1.1 "YoonManse",sans-serif;color:#2f6a2c}
+.evt h3{margin:0;font:500 1.55em/1.2 "SCoreDream","Pretendard",sans-serif;color:#2f6a2c}
 .evt .sub{font-size:.95em;color:#6f6e58;margin:.45em 0 .9em;line-height:1.55}
 .evt .steps{display:grid;grid-template-columns:max-content 1fr;border-top:1.5px solid #4f9a45;border-bottom:1px solid #e7e4d6;margin-bottom:.75em}
 .evt .steps>div{padding:.7em .5em .7em 0}.evt .steps>div+div{border-left:1px solid #e7e4d6;padding-left:.75em}
@@ -262,7 +267,7 @@ html.crlock,html.crlock body{overflow:hidden;overscroll-behavior:none}.howm,.how
 .upi .mt-in{flex:1 1 150px}
 .upm{position:fixed;inset:0;z-index:50;background:rgba(40,40,30,.38);display:flex;align-items:flex-end;justify-content:center}
 .upm-box{width:100%;max-width:560px;max-height:88vh;overflow:auto;background:var(--bg,#fbfaf5);border-radius:20px 20px 0 0;padding:16px 16px 28px;display:grid;gap:10px;box-sizing:border-box}
-.upm-h{display:flex;justify-content:space-between;align-items:center;position:relative}.upm-h b{font-size:18px}.upm-h .x{position:static;transform:none}
+.upm-h{display:flex;justify-content:space-between;align-items:center;position:relative}.upm-h b{font-size:18px}#howT{font:500 20px/1.25 "SCoreDream","Pretendard",sans-serif;color:#2f6a2c}.upm-h .x{position:static;transform:none}
 .upi.ok{border-color:#cfe1b4;background:#f4f9ea}
 .upi input[type=date]{font:14px var(--body);padding:5px 6px;border:1px solid var(--line);border-radius:8px;background:#fff}
 .upi select,.upi input[type=text]{font:14px var(--body);padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;min-width:0}
@@ -369,7 +374,7 @@ footer{font-size:12px;color:var(--muted)}
 .letter p{margin:0}.letter p+p{margin-top:24.4px}.letter .to{font-weight:700;color:#2f6a2c}.letter .from{text-align:right;font-weight:700}
 .letter .sg1{font-size:13.5px}.letter .sg1 button{all:unset;cursor:pointer;color:var(--fg)}.letter .sg1 u{text-decoration-color:#b9b6a2;text-underline-offset:3px}
 .h1.letter{position:relative;background:#fffaf0;background-image:none;border:1px solid #e9dcc0;border-radius:4px;padding:20px 18px 16px;box-shadow:0 3px 12px rgba(120,90,30,.12);line-height:1.75} /* 편지: 엽서 */
-.h1.letter p+p{margin-top:14px}.h1.letter .to{font:400 22px/1.2 "YoonManse",sans-serif;color:#2f6a2c;padding-right:60px}
+.h1.letter p+p{margin-top:14px}.h1.letter .to{font:500 19px/1.25 "SCoreDream","Pretendard",sans-serif;color:#2f6a2c;padding-right:60px}
 .h1.letter .stp{position:absolute;top:12px;right:12px;width:46px;height:52px;background:#fff;padding:4px;box-shadow:0 1px 3px rgba(0,0,0,.15);background-image:radial-gradient(circle at 3px 3px,#fffaf0 2.2px,transparent 2.5px);background-size:7px 7px;background-position:-2px -2px}
 .h1.letter .stp svg{width:100%;height:100%;background:#eef5e4;display:block}
 .h1.letter .pm{position:absolute;top:44px;right:46px;transform:rotate(-14deg);font:700 8px/1 "Pretendard",sans-serif;letter-spacing:.1em;color:rgba(160,90,40,.55);border:1.5px solid rgba(160,90,40,.45);border-radius:999px;padding:6px 7px}
@@ -395,15 +400,30 @@ footer{font-size:12px;color:var(--muted)}
 .coach .bot{display:flex;align-items:center;gap:10px}.coach .dots{display:flex;gap:5px;flex:1}.coach .dots i{width:6px;height:6px;border-radius:50%;background:#d6d2c2}.coach .dots i.on{background:#4f9a45;width:16px;border-radius:3px}
 .coach .skip{all:unset;cursor:pointer;font-size:13px;color:var(--muted);padding:6px 4px}.coach .next{all:unset;cursor:pointer;font-size:13.5px;font-weight:700;color:#fffefa;background:#4f9a45;border-radius:999px;padding:7px 16px}
 @media (prefers-reduced-motion:reduce){.coach .hole,.coach .bub{transition:none}}
+.iab{position:fixed;inset:0;z-index:96;background:rgba(15,18,12,.14);display:grid;place-items:end center;padding:16px 16px max(20px,env(safe-area-inset-bottom,0px))}
+.iab .iabc{box-sizing:border-box;width:min(340px,calc(100vw - 56px));justify-self:center;margin:0 auto 18px;background:rgba(255,254,250,.72);-webkit-backdrop-filter:blur(10px) saturate(1.2);backdrop-filter:blur(10px) saturate(1.2);border:1px solid rgba(255,255,255,.6);border-radius:18px;padding:16px 16px 12px;box-shadow:0 10px 30px rgba(0,0,0,.18);display:grid;gap:8px}
+.iab h4{margin:0;font-size:15px;font-weight:400;color:#2f6a2c}.iab p{margin:0;font-size:13.5px;line-height:1.6;color:var(--fg)}.iab small{display:block;font-size:12px;color:var(--muted);line-height:1.5}
+.iab .go{all:unset;cursor:pointer;text-align:center;background:#4f9a45;color:#fffefa;border-radius:999px;padding:10px 0;font-size:14px;margin-top:4px}
+.iab .cp{all:unset;cursor:pointer;text-align:center;border:1px solid #cfd8c8;color:#2f6a2c;border-radius:999px;padding:9px 0;font-size:14px;background:#fff}
+.iab .st{all:unset;cursor:pointer;text-align:center;font-size:13px;color:var(--muted);padding:6px}
+.pwa{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:95;box-sizing:border-box;width:min(340px,calc(100vw - 56px));background:rgba(255,254,250,.78);-webkit-backdrop-filter:blur(10px) saturate(1.2);backdrop-filter:blur(10px) saturate(1.2);border:1px solid rgba(255,255,255,.6);border-radius:18px;padding:14px 16px 10px;box-shadow:0 10px 30px rgba(0,0,0,.18);display:grid;gap:8px}
+.pwa .pt{display:flex;gap:12px;align-items:center}.pwa img{width:44px;height:44px;border-radius:10px;flex:none}.pwa p{margin:0;font-size:13.5px;line-height:1.55;color:var(--fg)}
+.pwa .go{all:unset;cursor:pointer;text-align:center;background:#4f9a45;color:#fffefa;border-radius:999px;padding:9px 0;font-size:14px}.pwa .st{all:unset;cursor:pointer;text-align:center;font-size:13px;color:var(--muted);padding:4px}
+.iab ol{margin:2px 0 0;padding-left:20px;font-size:13.5px;line-height:1.7;color:var(--fg)}
 
 /* 하트 탭 정리: 같은 흰 카드, 간격 통일, 보안+백업은 한 카드 */
 #p-heart{gap:14px}
 #p-heart .guides{background:#fffefa;border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 6px rgba(60,60,40,.06);overflow:hidden}#p-heart .guides button{all:unset;cursor:pointer;box-sizing:border-box;width:100%;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;font-size:14px;color:#2f6a2c}#p-heart .guides button+button{border-top:1px solid #efece2}#p-heart .guides i{font-style:normal;font-size:20px;line-height:1;color:#9cc48a}
 .hsm{position:fixed;inset:0;z-index:92;background:rgba(20,24,18,.72);display:grid;place-items:center;padding:16px;overflow-y:auto}.hsm[hidden]{display:none}.hsb{width:100%;max-width:420px;background:#fffefa;border-radius:20px;padding:18px 16px 14px;box-shadow:0 10px 30px rgba(0,0,0,.25);max-height:calc(100vh - 32px);overflow-y:auto;box-sizing:border-box}
-.hsb h2{margin:0;font:400 24px/1.2 "YoonManse",sans-serif;color:#2f6a2c}.hsb .hld{margin:4px 0 12px;font-size:13px;color:#6f6e58}
+.hsb h2{margin:0;font:500 20px/1.25 "SCoreDream","Pretendard",sans-serif;color:#2f6a2c}.hsb .hld{margin:4px 0 12px;font-size:13px;color:#6f6e58}
 .hseg{display:grid;grid-template-columns:1fr 1fr;background:#efede3;border-radius:999px;padding:3px;margin-bottom:8px}.hseg button{all:unset;cursor:pointer;font-weight:600;font-size:13px;text-align:center;padding:7px 0;border-radius:999px;color:#87866f}.hseg button.on{background:#fff;color:#34352b;box-shadow:0 1px 4px rgba(60,60,40,.12)}
 .hst{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid #efece2}.hst:first-child{border-top:0}.hill{flex:none;width:92px;border:1.5px dashed #4f9a45;border-radius:10px;padding:4px;background:#fff}.hill svg{display:block;width:100%;height:auto}
 .htx{font-size:14px;line-height:1.55}.htx em{font-style:normal;display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#4f9a45;color:#fff;font:700 11px/1 "Pretendard",sans-serif;margin-right:5px;vertical-align:1px}.htx b{color:#2f6a2c;font-weight:600}.htx small{display:block;font-size:11.5px;color:#9a987f;margin-top:2px}
+.hsinst{all:unset;cursor:pointer;flex:1;box-sizing:border-box;text-align:center;background:#4f9a45;color:#fffefa;border-radius:999px;padding:11px 0;font-size:15px}
+.hsib p{margin:4px 0 12px;font-size:14px;line-height:1.55;color:var(--fg)}.hsib2{display:flex;gap:8px}.hsbk2{all:unset;cursor:pointer;flex:1;text-align:center;border:1px solid #cfd8c8;color:#2f6a2c;background:#fff;border-radius:999px;padding:10px 0;font-size:15px}
+#hsM.instmode .hld,#hsM.instmode .huse,#hsM.instmode #hsBkA,#hsM.instmode .hst{display:none}#hsM.instmode .hbot button{all:unset;cursor:pointer;font-size:13px;color:var(--muted);padding:8px 4px}#hsM.instmode .hbot{justify-content:center;margin-top:6px}
+.hbk{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:2px 0 6px;padding:10px 12px;border:1.5px solid #e2b75a;background:#fffaf0;border-radius:12px}.hbk p{margin:0;font-size:13px;line-height:1.55;color:var(--fg)}.hbk small{display:block;font-size:11.5px;color:var(--muted)}.hbk .pill2{flex:none}
+#hsM[data-os=ios] .hand,#hsM[data-os=and] .hios{display:none}
 .huse{margin-top:6px;background:#f4f8ea;border-radius:12px;padding:10px 12px;font-size:12.5px;line-height:1.65}.huse b{color:#2f6a2c;font-weight:600}.hbot{display:flex;justify-content:flex-end;margin-top:12px}.hbot button{all:unset;cursor:pointer;background:#4f9a45;color:#fff;border-radius:999px;padding:8px 18px;font-size:14px;font-weight:600}
 #p-heart .evt,#p-heart .safe,#p-heart .bk,#p-heart .h1.letter{margin:0;border-radius:14px;box-shadow:0 1px 6px rgba(60,60,40,.06)}
 #p-heart .safe,#p-heart .bk{padding:14px 16px;font-size:13.5px;line-height:1.6;background:#fffefa;border:1px solid var(--line)}
@@ -419,7 +439,7 @@ footer{font-size:12px;color:var(--muted)}
 <div class="wrap">
   <div class="lcol">
   <span id="cnt" hidden></span>
-  <div class="cardview"><div class="cvbar"><span class="cvl"><button type="button" class="fmtov" id="fmtTog" aria-label="이미지 비율 바꾸기">9:16</button></span><span class="cvact"><button type="button" class="fmtov" id="cvSave" aria-label="이미지 저장">저장</button><button type="button" class="fmtov" id="cvShare" aria-label="링크 공유">공유</button><button type="button" class="fmtov kk" id="cvKakao" aria-label="카카오톡으로 내 지도 공유">카톡</button></span></div><canvas id="cardImg" role="img" aria-label="나의 명산 지도 카드"></canvas><span id="cardBusy" class="tip" hidden>그리는 중…</span></div>
+  <div class="cvwrap"><div class="cvbar"><span class="cvl"><button type="button" class="fmtov" id="fmtTog" aria-label="이미지 비율 바꾸기">9:16</button><button type="button" class="fmtov" id="fontTog" aria-label="글씨체 바꾸기">폰트 1</button></span><span class="cvact"><button type="button" class="fmtov kk" id="cvKakao" aria-label="카카오톡으로 내 지도 공유">카톡 공유</button><button type="button" class="fmtov" id="cvSave" aria-label="이미지 저장">사진 저장</button><button type="button" class="fmtov" id="cvShare" aria-label="링크 공유">링크 공유</button></span></div><div class="cardview"><canvas id="cardImg" role="img" aria-label="나의 명산 지도 카드"></canvas><span id="cardBusy" class="tip" hidden>그리는 중…</span></div><div class="cvbot"><span class="cvlb">정상석</span><button type="button" class="fmtov" id="cbReset">원위치</button><button type="button" class="fmtov" id="cbAuto">잘 보이게</button><span class="cvlb" style="margin-left:auto">크기</span><span class="cbsz" id="cbSz" role="group" aria-label="정상석 크기"></span></div></div>
   <div id="linkBox" class="linkbox" hidden><input id="linkIn" class="search" readonly aria-label="공유 링크"><span class="tip" id="linkMsg"></span></div>
 
   <div id="island" class="island" hidden></div>
@@ -434,10 +454,10 @@ footer{font-size:12px;color:var(--muted)}
 
   <div id="p-upload" class="pane">
     <div class="uphead"><label class="btn share upbtn" for="bulk"><span>업로드</span><small>(10장 한도)</small></label>
-      <div class="uphint"><div>블랙야크 인증 사진을 올리면 편해요. <button type="button" class="lnk" id="howBtn">자세히</button></div><div>산에서 찍은 사진을 바로 올려도 돼요.</div></div></div>
+      <div class="uphint"><div>BAC 인증 캡처를 올리면 편해요. <button type="button" class="lnk" id="howBtn">방법</button></div><div>산에서 찍은 사진도 됩니다.</div></div></div>
     <input type="file" id="bulk" accept="image/*" multiple hidden>
     <p class="upwarn" id="upWarn" role="alert" hidden></p>
-    <p class="mvtip" id="mvTip" hidden>브라우저에서 쓰던 지도가 있나요? 홈 화면 앱은 저장 공간이 따로라 비어 보여요. 쓰던 곳에서 <b>하트 탭 → 백업 파일 저장</b> 후, 여기서 <button type="button" class="lnk" id="mvGo">백업 불러오기</button>를 눌러 옮겨주세요.</p>
+    <p class="mvtip" id="mvTip" hidden>브라우저에서 쓰던 지도는 여기로 옮겨야 보입니다. 쓰던 곳에서 하트 탭 → 백업 파일 저장 후, 여기서 <button type="button" class="lnk" id="mvGo">백업 불러오기</button> 클릭</p>
     <div id="newBox" class="newbox" hidden>
       <div class="nbh"><b>신규 등록 <span id="nbCnt"></span></b><span class="meta" id="aiNote"></span><button type="button" class="btn share" id="applyBtn" disabled>반영</button></div>
       <div id="ovw" class="ovw" hidden></div>
@@ -470,7 +490,7 @@ footer{font-size:12px;color:var(--muted)}
   </div>
 
   <div id="p-heart" class="pane about" hidden>
-    <div class="guides"><button type="button" id="coachAgain"><span>📖 지도 사용법</span><i aria-hidden="true">›</i></button><button type="button" id="bkOpen"><span>📦 지도 백업 · 불러오기 방법</span><i aria-hidden="true">›</i></button><button type="button" data-hs="and"><span>📲 홈 화면에 추가하는 방법 (안드로이드)</span><i aria-hidden="true">›</i></button><button type="button" data-hs="ios"><span>🍎 홈 화면에 추가하는 방법 (애플)</span><i aria-hidden="true">›</i></button></div>
+    <div class="guides"><button type="button" id="coachAgain"><span>📖 지도 사용법</span><i aria-hidden="true">›</i></button><button type="button" id="bkOpen"><span>📦 지도 백업 · 불러오기 방법</span><i aria-hidden="true">›</i></button><button type="button" data-hs="and"><span>📲 홈 화면에 추가하기 (안드로이드)</span><i aria-hidden="true">›</i></button><button type="button" data-hs="ios"><span>🍎 홈 화면에 추가하기 (애플)</span><i aria-hidden="true">›</i></button></div>
 
     <p class="safe"><b>🔒 보안 걱정 NO!</b><br>사진은 서버로 보내지 않습니다.<br>누끼, 저장 모두 내 폰 브라우저 안에서 이루어집니다.<br><span class="kkn">카톡 공유를 누를 때만 지도 이미지가 카카오로 전송돼요.</span></p>
     <div class="evt"><div class="eside"><span>WEEKLY</span></div><div class="em2">
@@ -515,26 +535,26 @@ footer{font-size:12px;color:var(--muted)}
 </div>
 
 <div class="hsm" id="bkM" hidden role="dialog" aria-modal="true" aria-label="지도 백업 · 불러오기"><div class="hsb">
-  <h2>지도 백업 · 불러오기</h2><p class="hld">폰을 바꾸거나, 브라우저와 홈 화면 앱 사이에서 지도를 옮길 때 써요.</p>
-  <div class="bk"><b>📦 지도 백업 · 불러오기</b><span>지도는 이 브라우저에만 저장됩니다.<br>필요한 경우, 백업 파일로 옮겨주세요.</span>
+  <h2>지도 백업 · 불러오기</h2><p class="hld">지도는 이 브라우저에만 저장됩니다.</p>
+  <div class="bk"><b>📦 지도 백업 · 불러오기</b><span>쓰던 곳에서 백업 파일 저장 → 옮길 곳에서 백업 불러오기</span>
       <div class="bkbtn"><button type="button" class="pill2 on" id="bkSave">백업 파일 저장</button><label class="pill2" for="bkIn">백업 불러오기</label></div>
       <input type="file" id="bkIn" accept=".json,application/json" hidden><span class="tip" id="bkMsg" role="status"></span></div>
-  <div class="huse"><b>💡 이럴 때 써요</b><br>· 브라우저에서 만든 지도를 <b>홈 화면 앱</b>으로 옮길 때<br>· <b>폰을 바꾸기 전에</b> (백업 파일을 새 폰으로 보내서 불러오기)<br>· 쓰던 곳에서 <b>백업 저장</b> → 옮길 곳에서 <b>불러오기</b></div>
+  <div class="huse">· 홈 화면 앱으로 옮길 때<br>· 폰을 바꿀 때</div>
   <div class="hbot"><button type="button" id="bkX">확인</button></div></div></div>
 <div class="hsm" id="hsM" hidden role="dialog" aria-modal="true" aria-labelledby="hsT"><div class="hsb">
-  <h2 id="hsT">홈 화면에 추가하기</h2><p class="hld">앱처럼 아이콘을 눌러 바로 열 수 있어요.</p>
+  <h2 id="hsT">홈 화면에 추가하기</h2><p class="hld">아이콘 하나로 바로 열립니다.</p>
   <div class="hseg"><button type="button" data-os="ios">애플 (사파리)</button><button type="button" data-os="and">안드로이드 (삼성 인터넷)</button></div>
-  <div class="hos" data-os="ios"><div class="hst"><div class="hill"><svg viewBox="0 0 120 170" aria-hidden="true"><rect x="2" y="2" width="116" height="166" rx="14" fill="#f6f5ef" stroke="#34352b" stroke-width="2"/><rect x="10" y="14" width="100" height="100" rx="6" fill="#eef5e4"/><text x="60" y="68" text-anchor="middle" font-size="11" fill="#4f9a45" font-family="YoonManse,sans-serif">나의 명산 지도</text><rect x="8" y="128" width="104" height="30" rx="15" fill="#fff" stroke="#d9d6cc"/><text x="52" y="147" text-anchor="middle" font-size="8.5" fill="#777" font-family="Pretendard,sans-serif">ynschoi.github.io</text><path d="M96 146 v-9 m-4 4 l4 -4 l4 4 M91 140 h-1 v9 h12 v-9 h-1" fill="none" stroke="#3b6cc4" stroke-width="1.8" stroke-linecap="round"/><circle cx="96" cy="143" r="10" fill="none" stroke="#e2a13b" stroke-width="3"/></svg></div><div class="htx"><em>1</em>사파리 아래 <b>공유 버튼</b>을 눌러요.<small>버튼이 안 보이면 ··· 를 누르고 공유</small></div></div><div class="hst"><div class="hill"><svg viewBox="0 0 120 170" aria-hidden="true"><rect x="2" y="2" width="116" height="166" rx="14" fill="#f6f5ef" stroke="#34352b" stroke-width="2"/><rect x="8" y="40" width="104" height="122" rx="10" fill="#fff" stroke="#d9d6cc"/><rect x="16" y="52" width="88" height="16" rx="4" fill="#f2f1ea"/><rect x="16" y="74" width="88" height="16" rx="4" fill="#f2f1ea"/><rect x="16" y="96" width="88" height="16" rx="4" fill="#eef5e4"/><rect x="16" y="118" width="88" height="16" rx="4" fill="#f2f1ea"/><rect x="16" y="140" width="88" height="16" rx="4" fill="#f2f1ea"/><text x="22" y="108" font-size="8.5" fill="#2f6a2c" font-family="Pretendard,sans-serif" font-weight="700">홈 화면에 추가</text><rect x="90" y="99" width="9" height="9" rx="2" fill="none" stroke="#2f6a2c" stroke-width="1.2"/><path d="M94.5 101 v5 M92 103.5 h5" stroke="#2f6a2c" stroke-width="1.2"/><rect x="12" y="94" width="96" height="20" rx="6" fill="none" stroke="#e2a13b" stroke-width="2.5"/></svg></div><div class="htx"><em>2</em>목록을 내려서<br><b>홈 화면에 추가</b>를 눌러요.</div></div><div class="hst"><div class="hill"><svg viewBox="0 0 120 170" aria-hidden="true"><rect x="2" y="2" width="116" height="166" rx="14" fill="#f6f5ef" stroke="#34352b" stroke-width="2"/><rect x="14" y="18" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="38" y="18" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="62" y="18" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="86" y="18" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="14" y="46" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="38" y="46" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="62" y="46" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="86" y="46" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="14" y="74" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="38" y="74" width="18" height="18" rx="5" fill="#d9d6cc"/><image href="icon-180.png" x="62" y="74" width="18" height="18"/><text x="71" y="102" text-anchor="middle" font-size="5.5" fill="#34352b" font-family="Pretendard,sans-serif">나의 명산 100</text><circle cx="71" cy="83" r="14" fill="none" stroke="#e2a13b" stroke-width="3"/><rect x="66" y="6" width="44" height="14" rx="7" fill="#3b6cc4"/><text x="88" y="16" text-anchor="middle" font-size="8" fill="#fff" font-family="Pretendard,sans-serif" font-weight="700">추가</text></svg></div><div class="htx"><em>3</em>오른쪽 위 <b>추가</b>를 누르면<br>홈 화면에 아이콘이 생겨요.</div></div></div><div class="hos" data-os="and" hidden><div class="hst"><div class="hill"><svg viewBox="0 0 120 170" aria-hidden="true"><rect x="2" y="2" width="116" height="166" rx="14" fill="#f6f5ef" stroke="#34352b" stroke-width="2"/><rect x="10" y="14" width="100" height="104" rx="6" fill="#eef5e4"/><text x="60" y="70" text-anchor="middle" font-size="11" fill="#4f9a45" font-family="YoonManse,sans-serif">나의 명산 지도</text><rect x="2" y="132" width="116" height="34" fill="#fff" stroke="#d9d6cc"/><rect x="14" y="145" width="10" height="8" rx="2" fill="#bbb"/><rect x="36" y="145" width="10" height="8" rx="2" fill="#bbb"/><rect x="58" y="145" width="10" height="8" rx="2" fill="#bbb"/><rect x="80" y="145" width="10" height="8" rx="2" fill="#bbb"/><path d="M98 144 h10 M98 149 h10 M98 154 h10" stroke="#34352b" stroke-width="1.8" stroke-linecap="round"/><circle cx="103" cy="149" r="10" fill="none" stroke="#e2a13b" stroke-width="3"/></svg></div><div class="htx"><em>1</em>아래 메뉴 <b>≡</b>를 눌러요.</div></div><div class="hst"><div class="hill"><svg viewBox="0 0 120 170" aria-hidden="true"><rect x="2" y="2" width="116" height="166" rx="14" fill="#f6f5ef" stroke="#34352b" stroke-width="2"/><rect x="8" y="56" width="104" height="106" rx="10" fill="#fff" stroke="#d9d6cc"/><rect x="16" y="66" width="16" height="16" rx="4" fill="#f2f1ea"/><rect x="40" y="66" width="16" height="16" rx="4" fill="#f2f1ea"/><rect x="64" y="66" width="16" height="16" rx="4" fill="#f2f1ea"/><rect x="88" y="66" width="16" height="16" rx="4" fill="#f2f1ea"/><rect x="16" y="94" width="16" height="16" rx="4" fill="#f2f1ea"/><rect x="40" y="94" width="16" height="16" rx="4" fill="#eef5e4"/><rect x="64" y="94" width="16" height="16" rx="4" fill="#f2f1ea"/><rect x="88" y="94" width="16" height="16" rx="4" fill="#f2f1ea"/><path d="M44.5 98 v8 M40.5 102 h8" stroke="#2f6a2c" stroke-width="1.6"/><text x="45" y="129" text-anchor="middle" font-size="5.6" fill="#2f6a2c" font-family="Pretendard,sans-serif" font-weight="700">현재 페이지 추가</text><rect x="20" y="88" width="50" height="46" rx="6" fill="none" stroke="#e2a13b" stroke-width="2.5"/></svg></div><div class="htx"><em>2</em><b>현재 페이지 추가</b>를 눌러요.</div></div><div class="hst"><div class="hill"><svg viewBox="0 0 120 170" aria-hidden="true"><rect x="2" y="2" width="116" height="166" rx="14" fill="#f6f5ef" stroke="#34352b" stroke-width="2"/><rect x="14" y="18" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="38" y="18" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="62" y="18" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="86" y="18" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="14" y="46" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="38" y="46" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="62" y="46" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="86" y="46" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="14" y="74" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="38" y="74" width="18" height="18" rx="5" fill="#d9d6cc"/><image href="icon-180.png" x="62" y="74" width="18" height="18"/><text x="71" y="102" text-anchor="middle" font-size="5.5" fill="#34352b" font-family="Pretendard,sans-serif">나의 명산 100</text><circle cx="71" cy="83" r="14" fill="none" stroke="#e2a13b" stroke-width="3"/><rect x="14" y="128" width="92" height="30" rx="8" fill="#fff" stroke="#d9d6cc"/><text x="60" y="147" text-anchor="middle" font-size="8.5" fill="#34352b" font-family="Pretendard,sans-serif" font-weight="700">홈 화면 → 추가</text></svg></div><div class="htx"><em>3</em><b>홈 화면</b> → <b>추가</b>를 누르면<br>홈 화면에 아이콘이 생겨요.<small>크롬이면 ⋮ → 홈 화면에 추가</small></div></div></div>
-  <div class="huse"><b>📲 이렇게 써요</b><br>· 이제 <b>홈 화면 아이콘</b>으로 열면 앱처럼 꽉 찬 화면이에요.<br>· 새 기능은 <b>자동 업데이트</b>돼요.<br>· 홈 화면 앱은 브라우저와 <b>저장 공간이 따로</b>예요. 브라우저에서 만든 지도는 하트 탭 <b>백업 저장 → 불러오기</b>로 옮겨 주세요.</div>
+  <div class="hos" data-os="ios"><div class="hbk" id="hsBk" hidden><p>추가하기 전에 백업 파일을 먼저 저장해주세요.<small>아이폰 홈 화면 앱은 저장 공간이 따로라, 만든 지도를 백업으로 옮겨야 보입니다.</small></p><button type="button" class="pill2 on" id="hsBkGo">백업 파일 저장</button></div><div class="hst"><div class="hill"><svg viewBox="0 0 120 170" aria-hidden="true"><rect x="2" y="2" width="116" height="166" rx="14" fill="#f6f5ef" stroke="#34352b" stroke-width="2"/><rect x="10" y="14" width="100" height="100" rx="6" fill="#eef5e4"/><text x="60" y="68" text-anchor="middle" font-size="11" fill="#4f9a45" font-family="YoonManse,sans-serif">나의 명산 지도</text><rect x="8" y="128" width="104" height="30" rx="15" fill="#fff" stroke="#d9d6cc"/><text x="52" y="147" text-anchor="middle" font-size="8.5" fill="#777" font-family="Pretendard,sans-serif">ynschoi.github.io</text><path d="M96 146 v-9 m-4 4 l4 -4 l4 4 M91 140 h-1 v9 h12 v-9 h-1" fill="none" stroke="#3b6cc4" stroke-width="1.8" stroke-linecap="round"/><circle cx="96" cy="143" r="10" fill="none" stroke="#e2a13b" stroke-width="3"/></svg></div><div class="htx"><em>1</em>아래 공유 버튼 클릭<small>안 보이면 ··· → 공유</small></div></div><div class="hst"><div class="hill"><svg viewBox="0 0 120 170" aria-hidden="true"><rect x="2" y="2" width="116" height="166" rx="14" fill="#f6f5ef" stroke="#34352b" stroke-width="2"/><rect x="8" y="40" width="104" height="122" rx="10" fill="#fff" stroke="#d9d6cc"/><rect x="16" y="52" width="88" height="16" rx="4" fill="#f2f1ea"/><rect x="16" y="74" width="88" height="16" rx="4" fill="#f2f1ea"/><rect x="16" y="96" width="88" height="16" rx="4" fill="#eef5e4"/><rect x="16" y="118" width="88" height="16" rx="4" fill="#f2f1ea"/><rect x="16" y="140" width="88" height="16" rx="4" fill="#f2f1ea"/><text x="22" y="108" font-size="8.5" fill="#2f6a2c" font-family="Pretendard,sans-serif" font-weight="700">홈 화면에 추가</text><rect x="90" y="99" width="9" height="9" rx="2" fill="none" stroke="#2f6a2c" stroke-width="1.2"/><path d="M94.5 101 v5 M92 103.5 h5" stroke="#2f6a2c" stroke-width="1.2"/><rect x="12" y="94" width="96" height="20" rx="6" fill="none" stroke="#e2a13b" stroke-width="2.5"/></svg></div><div class="htx"><em>2</em>홈 화면에 추가 클릭</div></div><div class="hst"><div class="hill"><svg viewBox="0 0 120 170" aria-hidden="true"><rect x="2" y="2" width="116" height="166" rx="14" fill="#f6f5ef" stroke="#34352b" stroke-width="2"/><rect x="14" y="18" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="38" y="18" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="62" y="18" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="86" y="18" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="14" y="46" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="38" y="46" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="62" y="46" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="86" y="46" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="14" y="74" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="38" y="74" width="18" height="18" rx="5" fill="#d9d6cc"/><image href="icon-180.png" x="62" y="74" width="18" height="18"/><text x="71" y="102" text-anchor="middle" font-size="5.5" fill="#34352b" font-family="Pretendard,sans-serif">나의 명산 100</text><circle cx="71" cy="83" r="14" fill="none" stroke="#e2a13b" stroke-width="3"/><rect x="66" y="6" width="44" height="14" rx="7" fill="#3b6cc4"/><text x="88" y="16" text-anchor="middle" font-size="8" fill="#fff" font-family="Pretendard,sans-serif" font-weight="700">추가</text></svg></div><div class="htx"><em>3</em>오른쪽 위 추가 클릭</div></div></div><div class="hos" data-os="and" hidden><div class="hbk" id="hsBkA" hidden><p>추가하기 전에 백업 파일을 저장해두세요.<small>보통은 지도가 그대로 이어지지만, 혹시 안 보이면 백업으로 옮기면 됩니다.</small></p><button type="button" class="pill2 on" id="hsBkGoA">백업 파일 저장</button></div><div class="hst"><div class="hill"><svg viewBox="0 0 120 170" aria-hidden="true"><rect x="2" y="2" width="116" height="166" rx="14" fill="#f6f5ef" stroke="#34352b" stroke-width="2"/><rect x="10" y="14" width="100" height="104" rx="6" fill="#eef5e4"/><text x="60" y="70" text-anchor="middle" font-size="11" fill="#4f9a45" font-family="YoonManse,sans-serif">나의 명산 지도</text><rect x="2" y="132" width="116" height="34" fill="#fff" stroke="#d9d6cc"/><rect x="14" y="145" width="10" height="8" rx="2" fill="#bbb"/><rect x="36" y="145" width="10" height="8" rx="2" fill="#bbb"/><rect x="58" y="145" width="10" height="8" rx="2" fill="#bbb"/><rect x="80" y="145" width="10" height="8" rx="2" fill="#bbb"/><path d="M98 144 h10 M98 149 h10 M98 154 h10" stroke="#34352b" stroke-width="1.8" stroke-linecap="round"/><circle cx="103" cy="149" r="10" fill="none" stroke="#e2a13b" stroke-width="3"/></svg></div><div class="htx"><em>1</em>아래 메뉴 ≡ 클릭</div></div><div class="hst"><div class="hill"><svg viewBox="0 0 120 170" aria-hidden="true"><rect x="2" y="2" width="116" height="166" rx="14" fill="#f6f5ef" stroke="#34352b" stroke-width="2"/><rect x="8" y="56" width="104" height="106" rx="10" fill="#fff" stroke="#d9d6cc"/><rect x="16" y="66" width="16" height="16" rx="4" fill="#f2f1ea"/><rect x="40" y="66" width="16" height="16" rx="4" fill="#f2f1ea"/><rect x="64" y="66" width="16" height="16" rx="4" fill="#f2f1ea"/><rect x="88" y="66" width="16" height="16" rx="4" fill="#f2f1ea"/><rect x="16" y="94" width="16" height="16" rx="4" fill="#f2f1ea"/><rect x="40" y="94" width="16" height="16" rx="4" fill="#eef5e4"/><rect x="64" y="94" width="16" height="16" rx="4" fill="#f2f1ea"/><rect x="88" y="94" width="16" height="16" rx="4" fill="#f2f1ea"/><path d="M44.5 98 v8 M40.5 102 h8" stroke="#2f6a2c" stroke-width="1.6"/><text x="45" y="129" text-anchor="middle" font-size="5.6" fill="#2f6a2c" font-family="Pretendard,sans-serif" font-weight="700">현재 페이지 추가</text><rect x="20" y="88" width="50" height="46" rx="6" fill="none" stroke="#e2a13b" stroke-width="2.5"/></svg></div><div class="htx"><em>2</em>현재 페이지 추가 클릭</div></div><div class="hst"><div class="hill"><svg viewBox="0 0 120 170" aria-hidden="true"><rect x="2" y="2" width="116" height="166" rx="14" fill="#f6f5ef" stroke="#34352b" stroke-width="2"/><rect x="14" y="18" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="38" y="18" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="62" y="18" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="86" y="18" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="14" y="46" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="38" y="46" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="62" y="46" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="86" y="46" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="14" y="74" width="18" height="18" rx="5" fill="#d9d6cc"/><rect x="38" y="74" width="18" height="18" rx="5" fill="#d9d6cc"/><image href="icon-180.png" x="62" y="74" width="18" height="18"/><text x="71" y="102" text-anchor="middle" font-size="5.5" fill="#34352b" font-family="Pretendard,sans-serif">나의 명산 100</text><circle cx="71" cy="83" r="14" fill="none" stroke="#e2a13b" stroke-width="3"/><rect x="14" y="128" width="92" height="30" rx="8" fill="#fff" stroke="#d9d6cc"/><text x="60" y="147" text-anchor="middle" font-size="8.5" fill="#34352b" font-family="Pretendard,sans-serif" font-weight="700">홈 화면 → 추가</text></svg></div><div class="htx"><em>3</em>홈 화면 → 추가 클릭<small>크롬은 ⋮ → 홈 화면에 추가</small></div></div></div>
+  <div class="huse">· 새 기능은 자동으로 업데이트됩니다.<br><span class="hios">· 홈 화면 앱에서 하트 탭 → 백업 불러오기로 지도를 옮겨주세요.</span><span class="hand">· 홈 화면 앱에서 지도가 안 보이면 하트 탭 → 백업 불러오기로 옮겨주세요.</span></div>
   <div class="hbot"><button type="button" id="hsX">확인</button></div></div></div>
 <div class="howm" id="howM" hidden role="dialog" aria-modal="true" aria-labelledby="howT">
   <div class="howm-box">
-    <div class="upm-h"><b id="howT">블랙야크 인증 사진 올리는 법</b><button type="button" class="x" id="howX" aria-label="닫기">×</button></div>
+    <div class="upm-h"><b id="howT">BAC 인증 캡처 올리는 법</b><button type="button" class="x" id="howX" aria-label="닫기">×</button></div>
     <ol class="howl">
-      <li>BAC 앱 홈에서 <b>오른쪽 위 동그라미(내 프로필)</b>를 눌러요.</li>
-      <li><b>인증</b> 탭에서 올릴 인증 글을 찾아요.</li>
-      <li><b>산 이름 · 사진 · 날짜</b>가 한 화면에 다 나오게 캡처해요.</li>
-      <li>여기서 <b>업로드</b>로 캡처를 올리면 산 이름·날짜·BAC인증이 자동으로 채워지고, 사진은 누끼를 따서 스티커로 만들어요.</li>
+      <li>BAC 앱 오른쪽 위 내 프로필 클릭</li>
+      <li>인증 탭에서 올릴 글 찾기</li>
+      <li>산 이름·사진·날짜가 다 보이게 캡처</li>
+      <li>업로드하면 산 이름·날짜가 자동으로 채워집니다.</li>
     </ol>
     <div class="ills">
       <figure>
@@ -911,8 +931,14 @@ const EVT_ID="hof-2026-11-w1";
 (()=>{ const m=document.getElementById("bkM"); document.getElementById("bkOpen").onclick=()=>{ m.querySelector(".hsb").scrollTop=0; m.hidden=false; gc("guide-backup"); };
   document.getElementById("bkX").onclick=()=>m.hidden=true; m.addEventListener("click",e=>{ if(e.target===m) m.hidden=true; }); })();
 // 홈 화면에 추가하는 방법 안내 (애플 / 안드로이드)
-(()=>{ const m=document.getElementById("hsM"); const show=os=>{ m.querySelectorAll(".hseg button").forEach(b=>b.classList.toggle("on",b.dataset.os===os)); m.querySelectorAll(".hos").forEach(d=>d.hidden=d.dataset.os!==os); m.querySelector(".hsb").scrollTop=0; };
-  document.querySelectorAll("#p-heart [data-hs]").forEach(b=>b.onclick=()=>{ show(b.dataset.hs); m.hidden=false; gc("guide-home-"+b.dataset.hs); });
+(()=>{ const m=document.getElementById("hsM"), ua=navigator.userAgent, DEV=/iPhone|iPad|iPod/i.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1)?"ios":/Android/i.test(ua)?"and":"pc";
+  if(DEV!=="pc"){ document.querySelectorAll("#p-heart [data-hs]").forEach(b=>{ if(b.dataset.hs!==DEV) b.hidden=true; else b.querySelector("span").textContent="📲 홈 화면에 추가하기"; }); m.querySelector(".hseg").hidden=true; } // 폰이면 그 기종 것만
+  const inst=document.createElement("button"); inst.type="button"; inst.className="hsinst"; inst.textContent="홈 화면에 추가"; inst.hidden=true; document.getElementById("hsBkA").after(inst);
+  inst.onclick=async()=>{ if(await pwaInstall("guide-btn")) m.hidden=true; };
+  const ib=document.createElement("div"); ib.className="hsib"; ib.innerHTML='<p id="hsIbT">💡 홈 화면 추가 전에<br>백업 파일을 저장해두면 좋아요.</p><div class="hsib2"><button type="button" class="hsbk2" id="hsIbBk">백업 파일 저장</button></div>'; inst.before(ib); ib.querySelector(".hsib2").appendChild(inst);
+  document.getElementById("hsIbBk").onclick=()=>document.getElementById("hsBkGo").click();
+  const show=os=>{ m.dataset.os=os; inst.hidden=!(os==="and"&&PWA_EVT); m.classList.toggle("instmode",!inst.hidden); const has=!!Object.keys(PH).length; document.getElementById("hsIbT").hidden=document.getElementById("hsIbBk").hidden=!has; ib.hidden=inst.hidden; document.getElementById("hsX").textContent=inst.hidden?"확인":"닫기"; m.querySelectorAll('.hos[data-os="and"] .hst').forEach(h=>h.hidden=!inst.hidden); document.getElementById("hsBk").hidden=document.getElementById("hsBkA").hidden=!Object.keys(PH).length; m.querySelectorAll(".hseg button").forEach(b=>b.classList.toggle("on",b.dataset.os===os)); m.querySelectorAll(".hos").forEach(d=>d.hidden=d.dataset.os!==os); m.querySelector(".hsb").scrollTop=0; };
+  document.querySelectorAll("#p-heart [data-hs]").forEach(b=>b.onclick=async()=>{ if(b.dataset.hs==="and"&&!Object.keys(PH).length&&await pwaInstall("guide")) return; show(b.dataset.hs); m.hidden=false; gc("guide-home-"+b.dataset.hs); });
   m.querySelectorAll(".hseg button").forEach(b=>b.onclick=()=>show(b.dataset.os));
   document.getElementById("hsX").onclick=()=>m.hidden=true; m.addEventListener("click",e=>{ if(e.target===m) m.hidden=true; }); })();
 // 숨은 스위치: 하트 탭 맨 아래 version 글자를 3초 안에 5번 누르면 이 기기를 통계에서 빼기/다시 넣기 (표시 없음)
@@ -927,15 +953,17 @@ document.addEventListener("click",async e=>{ const b=e.target.closest("[data-cop
   if(b.dataset.toast){ let t=document.querySelector(".cptoast"); if(!t){ t=document.createElement("div"); t.className="cptoast"; t.setAttribute("role","status"); document.body.appendChild(t); } t.textContent=b.dataset.toast; t.hidden=false; clearTimeout(t._h); t._h=setTimeout(()=>t.hidden=true,2200); return; }
   b.classList.add("done"); b.textContent="복사했어요"; setTimeout(()=>{ b.innerHTML=old; b.classList.remove("done"); },1400); });
 
-(()=>{ if(ls.get("bac100-evtseen","")===EVT_ID) return; const hb=document.querySelector('.ptabs [data-p="heart"]'); const t=document.createElement("span"); t.className="evtbadge"; t.textContent="event"; t.setAttribute("aria-hidden","true"); hb.appendChild(t);
-  hb.addEventListener("click",()=>{ ls.set("bac100-evtseen",EVT_ID); t.remove(); gc("evt-seen"); },{once:true}); })();
+(()=>{ if(ls.get("bac100-evtseen","")===EVT_ID) return; const hb=document.querySelector('.ptabs [data-p="heart"]'); 
+  hb.addEventListener("click",()=>{ ls.set("bac100-evtseen",EVT_ID); gc("evt-seen"); },{once:true}); })(); // event 딱지는 없앰
 document.querySelectorAll(".ptabs button").forEach(b=>b.onclick=e=>{ if(!coachEl&&e&&e.isTrusted) gcDay("tab-"+b.dataset.p);
   document.querySelectorAll(".ptabs button").forEach(x=>{const on=x===b;x.setAttribute("aria-selected",on);document.getElementById("p-"+x.dataset.p).hidden=!on;}); });
 // ── 정상석 크기 5단계 ──
 const SZL=[.7,.85,1,1.2,1.4], SZN=["아주 작게","작게","보통","크게","아주 크게"];
 let SZ=ls.get("bac100-sz",2); if(!(SZ>=0&&SZ<5)) SZ=2;
 (function(){const g=document.getElementById("szSeg");SZN.forEach((t,i)=>{const b=document.createElement("button");b.type="button";b.textContent=t;b.setAttribute("aria-pressed",i===SZ);
-  b.onclick=()=>{SZ=i;ls.set("bac100-sz",SZ);g.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",j===SZ));relayout();};g.appendChild(b);});})();
+  b.onclick=()=>setSZ(i);g.appendChild(b);});
+  const c=document.getElementById("cbSz"); SZN.forEach((t,i)=>{ const b=document.createElement("button"); b.type="button"; b.className="fmtov"; b.textContent=i+1; b.setAttribute("aria-label","정상석 크기 "+t); b.setAttribute("aria-pressed",i===SZ); b.onclick=()=>{ gcDay("size-bar"); setSZ(i); }; c.appendChild(b); });})();
+function setSZ(i){ SZ=i; ls.set("bac100-sz",SZ); document.querySelectorAll("#szSeg button,#cbSz button").forEach(x=>x.setAttribute("aria-pressed",x.parentNode.children[i]===x)); relayout(); }
 // ── 스토리 / 게시글 ──
 let FMT="story"; // 처음엔 늘 9:16
 function syncFmt(){ document.getElementById("fmtTog").textContent=FMT==="post"?"4:5":"9:16"; }
@@ -982,7 +1010,9 @@ const fontStack=()=>`"${FONT}","Pretendard","Apple SD Gothic Neo","Malgun Gothic
 function applyFont(){ const st=fontStack(); document.querySelectorAll("#map text").forEach(t=>t.style.fontFamily=st); }
 const fontSel=document.getElementById("fontSel");
 FONTS.forEach(([k,n])=>{const o=document.createElement("option");o.value=k;o.textContent=n;o.style.fontFamily=`"${k}",Pretendard,sans-serif`;fontSel.appendChild(o);});
-fontSel.value=FONT; fontSel.onchange=()=>{FONT=fontSel.value; ls.set("bac100-font",FONT); applyFont(); scheduleCard();}; applyFont();
+const fontTog=document.getElementById("fontTog"), syncFontTog=()=>{ fontTog.textContent="폰트 "+(FONTS.findIndex(f=>f[0]===FONT)+1); };
+fontSel.value=FONT; fontSel.onchange=()=>{FONT=fontSel.value; ls.set("bac100-font",FONT); applyFont(); syncFontTog(); scheduleCard();}; applyFont(); syncFontTog();
+fontTog.onclick=()=>{ gcDay("font-tog"); const i=FONTS.findIndex(f=>f[0]===FONT); fontSel.value=FONTS[(i+1)%FONTS.length][0]; fontSel.onchange(); };
 
 // 산 정보 아일랜드 (목록과 같은 줄)
 function select(n){
@@ -1248,7 +1278,7 @@ function openCrop(r){ hideSug(); CR={r,box:(r.cbox||[.08,.08,.92,.98]).slice(),m
 const GC_SITE=location.hostname.startsWith("my100san")?"new":"old"; // 이벤트를 주소별로 구분: new = my100san.github.io, old = ynschoi.github.io/BAC100
 // ── 자동 업데이트: 홈 화면에 추가한 앱도 새 버전이 올라가면 알아서 바뀌게 ──
 // version.json(수십 바이트)만 확인하고, 다르면 새 파일을 받아 다시 연다. 작업 중(사진 반영 전)엔 다음 기회로.
-const APPV="20261104-220410";
+const APPV="20261105-010859";
 (function(){ let last=0;
   async function chk(atStart){ const now=Date.now(); if(!atStart&&now-last<60000) return; last=now;
     try{ const r=await fetch("version.json?t="+now,{cache:"no-store"}); if(!r.ok) return; const v=(await r.json()).v; if(!v||v===APPV) return;
@@ -1965,17 +1995,20 @@ cardImg.addEventListener("click",e=>{
   if(best) showIsland(best.n);
 });
 const decoSize=f=>{ if(DSEL==null) return; const d=DECOS[DSEL]; d.h=Math.max(20,Math.min(400,d.h*f)); ls.set("bac100-decos",DECOS); compose(); };
+document.getElementById("cbReset").onclick=()=>document.getElementById("resetPos").click(); document.getElementById("cbAuto").onclick=()=>autoBtn.click();
 document.getElementById("resetPos").onclick=()=>{ gcDay("pos-reset");POS={}; ls.set("bac100-pos",POS); relayout();};
 document.getElementById("mkShare").onclick=async e=>{
   const b=e.currentTarget, cb=document.getElementById("cvSave"); b.disabled=cb.disabled=true; b.textContent="만드는 중…"; cb.textContent="만드는 중…";
-  try{ await getShareBlob(); } finally{ b.disabled=cb.disabled=false; b.textContent="이미지 저장"; cb.textContent="저장"; }
+  try{ await getShareBlob(); } finally{ b.disabled=cb.disabled=false; b.textContent="이미지 저장"; cb.textContent="사진 저장"; }
   const im=document.getElementById("shrImg"); if(im.src.startsWith("blob:"))URL.revokeObjectURL(im.src); im.src=URL.createObjectURL(shareBlob);
   document.getElementById("shrMsg").textContent=FMT==="post"?"게시글 크기(1080×1350)예요. 저장 버튼이 안 되면 이미지를 길게 눌러 저장하세요.":"스토리 크기(1080×1920)예요. 저장 버튼이 안 되면 이미지를 길게 눌러 저장하세요.";
   document.getElementById("shr").hidden=false;
 };
 document.getElementById("cvSave").onclick=()=>document.getElementById("mkShare").click();
+document.getElementById("hsBkGoA").onclick=()=>document.getElementById("hsBkGo").click();
+document.getElementById("hsBkGo").onclick=()=>{ gc("hs-backup"); document.getElementById("bkSave").click(); setTimeout(()=>{ const t=document.getElementById("bkMsg").textContent; if(t&&!/만드는 중/.test(t)) toast(t); },1500); };
 document.getElementById("cvShare").onclick=()=>{ document.getElementById("linkShare").click(); };
-document.getElementById("shrX").onclick=()=>document.getElementById("shr").hidden=true;
+document.getElementById("shrX").onclick=()=>{ document.getElementById("shr").hidden=true; setTimeout(()=>pwaNudge("save"),600); };
 document.getElementById("shrSave").onclick=async()=>{ gc("save-image-"+FMT);
   const msg=document.getElementById("shrMsg");
   const fname=FMT==="post"?"my-100-summits-post.png":"my-100-summits-story.png";
@@ -2013,7 +2046,7 @@ drawPeaks(); drawStickers(); renderList(); updateCount(); setView(FULL.slice());
 if(window.ResizeObserver){ const rc=document.querySelector(".rcol"), tb=document.querySelector(".ptabs"), uh=document.querySelector("#p-upload .uphead");
   new ResizeObserver(()=>{ const t=tb.offsetHeight, u=uh.offsetHeight, g=parseFloat(getComputedStyle(document.getElementById("p-upload")).rowGap)||10;
     rc.style.setProperty("--st1",(t+14)+"px"); rc.style.setProperty("--st2",(t+14+u+g)+"px"); rc.style.setProperty("--st3",(t+14+u+g+document.querySelector("#p-upload .inx").offsetHeight+g)+"px"); }).observe(uh); }
-if(window.ResizeObserver){ const wr=document.querySelector(".wrap"); new ResizeObserver(()=>{ const r=cardImg.getBoundingClientRect(); wr.style.setProperty("--cw",Math.round(r.width+2)+"px"); wr.style.setProperty("--ch",Math.round(r.height+2)+"px"); wr.style.setProperty("--k",Math.max(1,r.width/340).toFixed(3)); }).observe(cardImg); } // --k: 카드 위 알약 버튼도 카드 크기에 비례
+if(window.ResizeObserver){ const wr=document.querySelector(".wrap"); new ResizeObserver(()=>{ const r=cardImg.getBoundingClientRect(), rw=document.querySelector(".cvwrap").getBoundingClientRect(); wr.style.setProperty("--cw",Math.round(r.width+2)+"px"); wr.style.setProperty("--ch",Math.round(rw.height)+"px"); wr.style.setProperty("--k",Math.max(1,r.width/340).toFixed(3)); }).observe(cardImg); } // --k: 카드 위 알약 버튼도 카드 크기에 비례
 // 공유 링크(?from=share)로 들어온 방문 세기 → 주소창에서는 바로 지움
 (()=>{ const q=new URLSearchParams(location.search), fr=q.get("from"); if(fr!=="share"&&fr!=="kakao") return; try{ history.replaceState(null,"",location.pathname+location.hash); }catch(_){}
   let k=0; const go=()=>{ if(window.goatcounter&&goatcounter.count){ gc(fr==="kakao"?"visit-from-kakao":"visit-from-share"); } else if(++k<20) setTimeout(go,500); }; go(); })();
@@ -2030,14 +2063,48 @@ const standalone=navigator.standalone===true||(window.matchMedia&&matchMedia("(d
     let k=0; const go=()=>{ if(window.goatcounter&&goatcounter.count){ gc("open-"+where); gc("os-"+os); gc("cnt-"+cb); gc("ret-"+rb); ls.set("bac100-openday",t); } else if(++k<20) setTimeout(go,500); }; go(); } }
 if(standalone){ const t=new Date().toISOString().slice(0,10); if(ls.get("bac100-homeday","")!==t){ let k=0; const go=()=>{ if(window.goatcounter&&goatcounter.count){ gc("home-app"); ls.set("bac100-homeday",t); } else if(++k<20) setTimeout(go,500); }; go(); } }
   document.getElementById("mvTip").hidden=!(standalone&&!Object.keys(PH).length);
-  if(!ls.get("bac100-coach",false)&&!Object.keys(PH).length&&!standalone) setTimeout(()=>startCoach(),600); })(); // 처음 온 사람에게만 (정상석이 이미 있으면 안 띄움)
+  const coachGo=()=>{ if(!ls.get("bac100-coach",false)&&!Object.keys(PH).length&&!standalone) setTimeout(()=>startCoach(),600); };
+  const IAB=standalone?null:inAppInfo(); let seen=false; try{ seen=sessionStorage.getItem("bac100-iab")==="1"; }catch(_){}
+  if(IAB&&!seen) showIab(IAB,coachGo); else coachGo(); })();
+// 갤럭시·크롬: 홈 화면 설치 창을 직접 띄움 (아이폰은 이 기능이 없음)
+let PWA_EVT=null;
+if("serviceWorker" in navigator&&location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
+addEventListener("beforeinstallprompt",e=>{ if(!/Android/i.test(navigator.userAgent)) return; e.preventDefault(); PWA_EVT=e; gcDay("pwa-avail"); }); // 갤럭시(안드로이드)에서만 — PC 크롬은 브라우저 기본 설치 버튼 그대로
+addEventListener("appinstalled",()=>{ gc("pwa-installed"); PWA_EVT=null; document.querySelector(".pwa")?.remove(); });
+async function pwaInstall(from){ if(!PWA_EVT) return false; const e=PWA_EVT; PWA_EVT=null; gc("pwa-click-"+from); try{ await e.prompt(); const r=await e.userChoice; gc("pwa-"+(r&&r.outcome==="accepted"?"accept":"dismiss")); }catch(_){} return true; }
+function pwaNudge(from){ // 지도 반영·사진 저장 뒤, 한 사람에게 최대 2번
+  if(!PWA_EVT||document.querySelector(".pwa,.iab,.coach")) return; let n=0; try{ n=+localStorage.getItem("bac100-pwan")||0; }catch(_){} if(n>=2) return;
+  try{ localStorage.setItem("bac100-pwan",String(n+1)); }catch(_){} gc("pwa-nudge-"+from);
+  const el=document.createElement("div"); el.className="pwa"; el.setAttribute("role","dialog");
+  el.innerHTML='<div class="pt"><img src="icon-192.png" alt=""><p>홈 화면에 추가하면<br>아이콘으로 바로 열립니다.</p></div><button type="button" class="go">홈 화면에 추가</button><button type="button" class="st">나중에</button>';
+  document.body.appendChild(el); el.querySelector(".st").onclick=()=>{ gc("pwa-later"); el.remove(); }; el.querySelector(".go").onclick=async()=>{ el.remove(); gc("pwa-click-nudge"); if(Object.keys(PH).length) document.querySelector('#p-heart [data-hs="and"]').click(); else await pwaInstall("nudge"); }; } // 지도가 있으면 백업 칸이 있는 안내로
+// 카톡·인스타 같은 앱 안 브라우저면: 여기서 만든 지도는 그 앱 안에만 남아서, 기본 브라우저로 넘기기
+function inAppInfo(){ const ua=navigator.userAgent, ios=/iPhone|iPad|iPod/i.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1), and=/Android/i.test(ua);
+  const app=/KAKAOTALK/i.test(ua)?["kakao","카카오톡"]:/Instagram/i.test(ua)?["instagram","인스타그램"]:/FBAN|FBAV|FB_IAB/i.test(ua)?["facebook","페이스북"]:/NAVER\(inapp|NAVER/i.test(ua)?["naver","네이버 앱"]:/DaumApps|DAUM/i.test(ua)?["daum","다음 앱"]:/Line\//i.test(ua)?["line","라인"]:/BAND\//i.test(ua)?["band","밴드"]:
+    (and&&/; wv\)/.test(ua))||(ios&&!/Safari\//.test(ua))?["other","다른 앱"]:null;
+  return app&&(ios||and)?{key:app[0],name:app[1],ios,and}:null; }
+function showIab(I,done){ gc("iab-show-"+I.key); try{ sessionStorage.setItem("bac100-iab","1"); }catch(_){}
+  const url=location.origin+location.pathname, br=I.ios?"Safari":"기본 브라우저";
+  const auto=I.key==="kakao"||I.key==="line"||I.and; // 버튼으로 바로 넘길 수 있는 곳
+  const el=document.createElement("div"); el.className="iab"; el.setAttribute("role","dialog"); el.setAttribute("aria-modal","true");
+  el.innerHTML=`<div class="iabc"><h4>${I.name} 안에서 열려 있어요</h4><p>여기서 만든 지도는 ${I.name} 안에서만 저장됩니다.<br>나중에 다시 보려면 ${br}에서 열어주세요.</p>`+
+    (auto?`<button type="button" class="go">${br}로 열기</button>`:`<ol><li>화면의 ⋯ 메뉴 클릭</li><li>'Safari로 열기' 또는 '외부 브라우저로 열기' 클릭</li></ol><button type="button" class="cp">링크 복사해서 Safari에 붙여넣기</button>`)+
+    `<button type="button" class="st">그냥 둘러보기</button></div>`;
+  document.body.appendChild(el);
+  const close=()=>{ el.remove(); done&&done(); };
+  el.querySelector(".st").onclick=()=>{ gc("iab-stay-"+I.key); close(); };
+  const go=el.querySelector(".go"); if(go) go.onclick=()=>{ gc("iab-open-"+I.key);
+    if(I.key==="kakao") location.href="kakaotalk://web/openExternal?url="+encodeURIComponent(url);
+    else if(I.key==="line") location.href=url+"?openExternalBrowser=1";
+    else location.href="intent://"+location.host+location.pathname+"#Intent;scheme=https;action=android.intent.action.VIEW;S.browser_fallback_url="+encodeURIComponent(url)+";end"; };
+  const cp=el.querySelector(".cp"); if(cp) cp.onclick=async()=>{ gc("iab-copy-"+I.key); try{ await navigator.clipboard.writeText(url); toast("링크를 복사했어요. Safari 주소창에 붙여넣어 주세요."); }catch(_){ prompt("이 링크를 복사해서 Safari에 붙여넣어 주세요.",url); } }; } // 처음 온 사람에게만 (정상석이 이미 있으면 안 띄움)
 // ── 처음 사용법 안내: 어둡게 덮고 한 곳씩 밝게 ──
 const unionEl=(...q)=>({getBoundingClientRect(){ const R=q.map(x=>document.querySelector(x)).filter(Boolean).map(e=>e.getBoundingClientRect()); const l=Math.min(...R.map(r=>r.left)),t=Math.min(...R.map(r=>r.top)),r_=Math.max(...R.map(r=>r.right)),b=Math.max(...R.map(r=>r.bottom)); return {left:l,top:t,right:r_,bottom:b,width:r_-l,height:b-t}; }});
 const COACH=[
-  {el:()=>document.querySelector('label[for=bulk]'), tab:"upload", cap:true, t:"<b>정상석과 찍은 사진</b>을 올려주세요.<br><b>BAC 인증 캡처</b>를 올리면 편해요."},
-  {el:()=>demoArea(), try:true, t:"사진을 올리면 <b>지도에 붙어요</b>.<br>정상석을 <b>끌어서</b> 옮겨보세요!"},
-  {el:()=>document.querySelector('.ptabs [data-p="text"]'), t:"<b>닉네임</b>과 <b>각오 한 마디</b>를 써주세요."},
-  {el:()=>document.querySelector('.cvact'), t:"<b>저장</b>하고 <b>공유</b>해보세요!"}];
+  {el:()=>document.querySelector('label[for=bulk]'), tab:"upload", cap:true, t:"정상석과 찍은 사진을 올려주세요.<br>BAC 인증 캡처도 됩니다."},
+  {el:()=>demoArea(), try:true, t:"사진은 지도에 붙습니다.<br>끌어서 옮겨보세요."},
+  {el:()=>document.querySelector('.ptabs [data-p="text"]'), t:"닉네임과 각오 한 마디를 써주세요."},
+  {el:()=>document.querySelector('.cvact'), t:"사진 저장, 카톡 공유로 자랑해보세요."}];
 let coachI=-1, coachEl=null, COACH_DEMO=null;
 function demoArea(){ const cv=document.querySelector('.cardview'), G=window.__cardGeo, c=document.getElementById('cardImg'); if(!cv) return null;
   const R=cv.getBoundingClientRect(); if(COACH_FIX){ const t=R.top+COACH_FIX[0], bt=R.top+COACH_FIX[1]; return {getBoundingClientRect:()=>({left:R.left,right:R.right,width:R.width,top:t,bottom:bt,height:bt-t})}; } if(!G||!G.stk||!COACH_DEMO) return cv; const k=c.getBoundingClientRect().width/1080, cr=c.getBoundingClientRect();
